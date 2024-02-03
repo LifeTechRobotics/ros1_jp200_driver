@@ -29,6 +29,32 @@ class ROS1JP200Driver
             auto cmd = JP200Utils::JP200Cmd();
             commands.push_back(cmd);
         }
+
+        ROS_INFO_STREAM("Init subscriber");
+        sub_ = nh_.subscribe("jp200_cmd", 10, &ROS1JP200Driver::callback, this);
+
+        ROS_INFO_STREAM("Open port");
+        utils_->open_port();
+
+        if(utils_->get_fd() < 0)
+        {
+            ROS_ERROR_STREAM("Failed to open port");
+            utils_->close_port();
+        }
+        else
+        {
+            ROS_INFO_STREAM("Serial port was connected");
+        }
+    }
+
+    void run(){
+        ros::spin();
+    }
+
+    private:
+    void callback(const jp200_driver::JP200MultiArray::ConstPtr& msg)
+    {
+
     }
 
     std::string port_name_;
@@ -38,13 +64,7 @@ class ROS1JP200Driver
     std::vector<jp200_driver::JP200Utils::JP200Cmd> commands;
     ros::NodeHandle nh_;
     ros::Subscriber sub_;
-
 };
-
-void callback(const jp200_driver::JP200MultiArray::ConstPtr& msg)
-{
-
-}
 
 int main(int argc, char** argv)
 {
@@ -52,21 +72,4 @@ int main(int argc, char** argv)
     ros::NodeHandle nh;
 
     
-
-    
-
-    ROS_INFO_STREAM("Init subscriber");
-    ros::Subscriber cmd_subscriber_ = nh.subscribe("jp200_cmd", 1000, callback);
-
-    utils->open_port();
-
-    if(utils->get_fd() < 0)
-    {
-        ROS_ERROR_STREAM("Failed to open port");
-        utils->close_port();
-    }
-    else
-    {
-        ROS_INFO_STREAM("Serial port was connected");
-    }
 }
