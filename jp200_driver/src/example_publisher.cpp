@@ -5,7 +5,7 @@
 class ExampleNode {
 public:
   ExampleNode() {
-    pub_ = nh_.advertise<jp200_driver::JP200MultiArray>("example_topic", 10);
+    pub_ = nh_.advertise<jp200_driver::JP200MultiArray>("jp200_cmd", 10);
 
     timer_ = nh_.createTimer(ros::Duration(1.0), &ExampleNode::timerCallback, this);
     count = 0;
