@@ -33,12 +33,17 @@ include_directories(
 )
 
 add_library(jp200_utils src/utils.cpp)
+
 add_executable(jp200_driver src/main.cpp)
-add_executable(example_publisher src/example_publisher.cpp)
-
 add_dependencies(jp200_driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
 target_link_libraries(jp200_driver
+  jp200_utils
+  ${catkin_LIBRARIES}
+)
+
+add_executable(example_publisher src/example_publisher.cpp)
+add_dependencies(example_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(example_publisher
   jp200_utils
   ${catkin_LIBRARIES}
 )
